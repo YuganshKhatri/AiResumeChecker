@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up | Resume ATS Checker</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</head>
+<body>
+
+<div class="background"></div>
+
+<div class="signup-container">
+
+    <div class="logo">
+        <h1>Resume ATS Checker</h1>
+        <p>Create your account</p>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-message">
+                {% for category, message in messages %}
+                    <p>{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <form action="/signup" method="POST">
+
+        <div class="input-box">
+            <label>Full Name</label>
+            <input type="text" name="name" placeholder="Enter your full name" required>
+        </div>
+
+        <div class="input-box">
+            <label>Email Address</label>
+            <input type="email" name="email" placeholder="Enter your email" required>
+        </div>
+
+        <div class="input-box">
+            <label>Password</label>
+                <input
+                    type="password"
+                    id="password"
+                    name="passw"
+                    placeholder="Enter Password"
+                    required>
+
+                <i class="fa-solid fa-eye toggle-password"
+                onclick="togglePassword('password', this)"></i>
+        </div>
+
+        <div class="input-box">
+            <label>Confirm Password</label>
+                <input
+                    type="password"
+                    id="confirmPassword"
+                    name="cpassw"
+                    placeholder="Confirm Password"
+                    required>
+                    
+                <i class="fa-solid fa-eye toggle-password"
+                onclick="togglePassword('confirmPassword', this)"></i>
+        </div>
+
+        <button type="submit">
+            Create Account
+        </button>
+
+    </form>
+
+    <div class="login-link">
+        Already have an account?
+        <a href="/login">Login</a>
+    </div>
+
+</div>
+
+</body>
+</html>

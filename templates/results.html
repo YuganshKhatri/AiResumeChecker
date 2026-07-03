@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ATS Report</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+</head>
+
+<body class="result-page">
+
+    <nav class="navbar">
+
+        <div class="logo">
+
+            <i class="fa-solid fa-file-lines"></i>
+
+            Resume ATS Checker
+
+        </div>
+        
+        <a href="/homePage" class="back-btn-small">
+
+            <i class="fa-solid fa-house"></i>
+
+            Dashboard
+
+        </a>
+
+    </nav>
+
+    <div class="result-container">
+
+        <h1 class="page-title">
+
+            ATS Resume Analysis
+
+        </h1>
+
+        {% if filename %}
+
+        <p class="resume-name">
+
+            <i class="fa-solid fa-file-pdf"></i>
+
+            <strong>{{ filename }}</strong>
+
+        </p>
+
+        {% endif %}
+
+        {% if date %}
+
+        <p class="analysis-date">
+
+            <i class="fa-solid fa-calendar"></i>
+
+            {{ date }}
+
+        </p>
+
+        {% endif %}
+
+        <div class="score-card">
+
+            <h2>ATS SCORE</h2>
+
+            <div class="score">
+
+                {{ result.ats_score }}
+
+                <span>%</span>
+
+            </div>
+
+            <div class="progress">
+
+                <div class="progress-fill
+
+                {% if result.ats_score >= 90 %}
+                    green
+                {% elif result.ats_score >= 75 %}
+                    yellow
+                {% else %}
+                    red
+                {% endif %}"
+
+                    style="width: {{ result.ats_score }}%;">
+
+                </div>
+
+            </div>
+
+            <p class="rating">
+
+                {% if result.ats_score >= 90 %}
+
+                🟢 Excellent Match
+
+                {% elif result.ats_score >= 75 %}
+
+                🟡 Good Match
+
+                {% else %}
+
+                🔴 Needs Improvement
+
+                {% endif %}
+
+            </p>
+
+        </div>
+
+        <div class="grid">
+
+            <div class="card">
+
+                <h2>
+
+                    <i class="fa-solid fa-circle-check"></i>
+
+                    Strengths
+
+                </h2>
+
+                <ul>
+
+                    {% for item in result.get('strengths', []) %}
+
+                    <li>{{ item }}</li>
+
+                    {% endfor %}
+
+                </ul>
+
+            </div>
+
+            <div class="card">
+
+                <h2>
+
+                    <i class="fa-solid fa-circle-xmark"></i>
+
+                    Weaknesses
+
+                </h2>
+
+                <ul>
+
+                    {% for item in result.get('weaknesses', []) %}
+
+                    <li>{{ item }}</li>
+
+                    {% endfor %}
+
+                </ul>
+
+            </div>
+
+        </div>
+
+        <div class="card">
+
+            <h2>
+
+                Missing Skills
+
+            </h2>
+
+            <div class="chips">
+
+                {% for skill in result.get('missing_skills', []) %}
+
+                <span>{{ skill }}</span>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+        <div class="card">
+
+            <h2>
+
+                Keywords To Improve
+
+            </h2>
+
+            <div class="chips">
+
+                {% for skill in result.get('keywords_to_improve', []) %}
+
+                <span>{{ skill }}</span>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+        <div class="card">
+
+            <h2>
+
+                AI Suggestions
+
+            </h2>
+
+            <ul>
+
+                {% for item in result.get('suggestions', []) %}
+
+                <li>{{ item }}</li>
+
+                {% endfor %}
+
+            </ul>
+
+        </div>
+
+        <a href="/homePage" class="back-btn">
+
+            <i class="fa-solid fa-arrow-left"></i>
+
+            Analyze Another Resume
+
+        </a>
+
+    </div>
+
+</body>
+
+</html>

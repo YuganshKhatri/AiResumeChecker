@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ATS Dashboard</title>
+
+    <link rel="stylesheet"
+    href="{{ url_for('static', filename='style.css') }}">
+
+    <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+</head>
+
+<body>
+
+<div class="dashboard">
+
+    <nav class="navbar">
+
+        <div class="logo">
+            <i class="fa-solid fa-file-lines"></i>
+            Resume ATS Checker
+        </div>
+
+        <div class="nav-right">
+
+            <span>
+                Welcome, {{name}}
+            </span>
+
+            <a href="/" class="logout-btn">
+                Logout
+            </a>
+
+        </div>
+
+    </nav>
+
+    <div class="hero">
+
+        <h1>
+            Analyze Your Resume with AI
+        </h1>
+
+        <p>
+
+            Upload your resume and receive an ATS score,
+            missing skills, strengths, and improvement suggestions.
+
+        </p>
+
+    </div>
+
+    <div class="upload-card">
+
+        <form action="/analyze"
+              method="POST"
+              enctype="multipart/form-data">
+
+            <div class="upload-area">
+
+                <i class="fa-solid fa-cloud-arrow-up upload-icon"></i>
+
+                <h2>Upload Resume</h2>
+
+                <input
+                    type="file"
+                    name="resume"
+                    accept=".pdf,.doc,.docx"
+                    required>
+
+            </div>
+
+            <div class="input-group">
+
+                <label>
+
+                    Target Job Role
+
+                </label>
+
+                <input
+
+                    type="text"
+
+                    name="role"
+
+                    placeholder="Example: Software Engineer"
+
+                    required>
+
+            </div>
+
+            <button type="submit">
+
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
+
+                Analyze Resume
+
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+</body>
+</html>

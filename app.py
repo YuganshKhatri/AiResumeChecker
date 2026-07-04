@@ -93,24 +93,66 @@ def analyze():
     doc.close()
     print(text)
     prompt = f"""
-    You are an expert ATS Resume Checker.
-    Analyze the following resume for the role of "{role}".
+    You are an expert ATS (Applicant Tracking System) Resume Analyzer.
+    Your task is to evaluate the following resume ONLY for the job role: "{role}".
     Resume:
     {text}
-    Return ONLY valid JSON.
-    The JSON format should be:
-    {{
-        "ats_score": 0,
+
+    IMPORTANT INSTRUCTIONS:
+    1. Use the scoring rubric below exactly.
+    2. Do not guess randomly or change the scoring criteria.
+    3. Be objective and consistent.
+    4. Assume this same rubric is used for every resume.
+    5. Return ONLY valid JSON.
+    6. Do not include markdown or explanations outside the JSON.
+
+    SCORING RUBRIC (Total = 100)
+
+    1. Skills Match (40 points)
+    - Compare the candidate's technical and soft skills with those expected for the given role.
+    - Award points based on relevance and completeness.
+
+    2. Experience Relevance (20 points)
+    - Evaluate how relevant the work experience is for the target role.
+    - Consider internships, projects, and practical experience if professional experience is limited.
+
+    3. Projects (15 points)
+    - Evaluate the quality, complexity, technologies used, and relevance of projects.
+
+    4. Resume Structure & Formatting (10 points)
+    - Check section organization, readability, ATS-friendly formatting, and consistency.
+
+    5. Education & Certifications (5 points)
+    - Evaluate educational background and relevant certifications.
+
+    6. Keywords Coverage (10 points)
+    - Compare the resume against common keywords expected for the target role.
+    - Deduct points for important missing keywords.
+
+    FINAL ATS SCORE
+    Final ATS Score = Sum of all six categories.
+    Do NOT invent an arbitrary score.
+    The final score MUST equal the sum of the category scores.
+
+    Return ONLY the following JSON:
+
+    {
+    "ats_score": 0,
+    "score_breakdown": {
+        "skills_match": 0,
+        "experience": 0,
+        "projects": 0,
+        "formatting": 0,
+        "education": 0,
+        "keywords": 0
+    },
         "strengths": [],
         "weaknesses": [],
         "missing_skills": [],
         "keywords_to_improve": [],
-        "suggestions": []
-    }}
-    Do not write explanations.
-    Do not use markdown.
-    Do not use ```json.
-    Return only JSON.
+        "suggestions": [],
+        "summary": ""
+    }
     """
     response=model.generate_content(prompt)
     result=json.loads(response.text)

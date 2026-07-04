@@ -136,7 +136,7 @@ def analyze():
 
     Return ONLY the following JSON:
 
-    {
+    {{
     "ats_score": 0,
     "score_breakdown": {
         "skills_match": 0,
@@ -152,7 +152,7 @@ def analyze():
         "keywords_to_improve": [],
         "suggestions": [],
         "summary": ""
-    }
+    }}
     """
     response=model.generate_content(prompt)
     result=json.loads(response.text)

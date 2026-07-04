@@ -157,6 +157,6 @@ def analyze():
     response=model.generate_content(prompt)
     result=json.loads(response.text)
     today = datetime.now().strftime("%d %B %Y")
-    return render_template("results.html",name=name,result=result,filename=uploaded_file.filename,date=today)
+    return render_template("results.html",name=name,result=result,filename=uploaded_file.filename,date=today,role=role)
 if __name__=='__main__':
     app.run(host='0.0.0.0',port=7000,debug=True)

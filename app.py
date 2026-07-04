@@ -138,14 +138,14 @@ def analyze():
 
     {{
     "ats_score": 0,
-    "score_breakdown": {
+    "score_breakdown": {{
         "skills_match": 0,
         "experience": 0,
         "projects": 0,
         "formatting": 0,
         "education": 0,
         "keywords": 0
-    },
+    }},
         "strengths": [],
         "weaknesses": [],
         "missing_skills": [],

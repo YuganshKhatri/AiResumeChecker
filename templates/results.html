@@ -1,243 +1,96 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
-    <meta charset="UTF-8">
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>ATS Report</title>
-
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ATS Report</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 </head>
-
 <body class="result-page">
-
-    <nav class="navbar">
-
-        <div class="logo">
-
-            <i class="fa-solid fa-file-lines"></i>
-
-            Resume ATS Checker
-
-        </div>
-        
-        <a href="/homePage" class="back-btn-small">
-
-            <i class="fa-solid fa-house"></i>
-
-            Dashboard
-
-        </a>
-
-    </nav>
-
-    <div class="result-container">
-
-        <h1 class="page-title">
-
-            ATS Resume Analysis
-
-        </h1>
-
-        {% if filename %}
-
-        <p class="resume-name">
-
-            <i class="fa-solid fa-file-pdf"></i>
-
-            <strong>{{ filename }}</strong>
-
-        </p>
-
-        {% endif %}
-
-        {% if date %}
-
-        <p class="analysis-date">
-
-            <i class="fa-solid fa-calendar"></i>
-
-            {{ date }}
-
-        </p>
-
-        {% endif %}
-
-        <div class="score-card">
-
-            <h2>ATS SCORE</h2>
-
-            <div class="score">
-
-                {{ result.ats_score }}
-
-                <span>%</span>
-
-            </div>
-
-            <div class="progress">
-
-                <div class="progress-fill
-
-                {% if result.ats_score >= 90 %}
-                    green
-                {% elif result.ats_score >= 75 %}
-                    yellow
-                {% else %}
-                    red
-                {% endif %}"
-
-                    style="width: {{ result.ats_score }}%;">
-
-                </div>
-
-            </div>
-
-            <p class="rating">
-
-                {% if result.ats_score >= 90 %}
-
-                🟢 Excellent Match
-
-                {% elif result.ats_score >= 75 %}
-
-                🟡 Good Match
-
-                {% else %}
-
-                🔴 Needs Improvement
-
-                {% endif %}
-
-            </p>
-
-        </div>
-
-        <div class="grid">
-
-            <div class="card">
-
-                <h2>
-
-                    <i class="fa-solid fa-circle-check"></i>
-
-                    Strengths
-
-                </h2>
-
-                <ul>
-
-                    {% for item in result.get('strengths', []) %}
-
-                    <li>{{ item }}</li>
-
-                    {% endfor %}
-
-                </ul>
-
-            </div>
-
-            <div class="card">
-
-                <h2>
-
-                    <i class="fa-solid fa-circle-xmark"></i>
-
-                    Weaknesses
-
-                </h2>
-
-                <ul>
-
-                    {% for item in result.get('weaknesses', []) %}
-
-                    <li>{{ item }}</li>
-
-                    {% endfor %}
-
-                </ul>
-
-            </div>
-
-        </div>
-
-        <div class="card">
-
-            <h2>
-
-                Missing Skills
-
-            </h2>
-
-            <div class="chips">
-
-                {% for skill in result.get('missing_skills', []) %}
-
-                <span>{{ skill }}</span>
-
-                {% endfor %}
-
-            </div>
-
-        </div>
-
-        <div class="card">
-
-            <h2>
-
-                Keywords To Improve
-
-            </h2>
-
-            <div class="chips">
-
-                {% for skill in result.get('keywords_to_improve', []) %}
-
-                <span>{{ skill }}</span>
-
-                {% endfor %}
-
-            </div>
-
-        </div>
-
-        <div class="card">
-
-            <h2>
-
-                AI Suggestions
-
-            </h2>
-
-            <ul>
-
-                {% for item in result.get('suggestions', []) %}
-
-                <li>{{ item }}</li>
-
-                {% endfor %}
-
-            </ul>
-
-        </div>
-
-        <a href="/homePage" class="back-btn">
-
-            <i class="fa-solid fa-arrow-left"></i>
-
-            Analyze Another Resume
-
-        </a>
-
-    </div>
-
+<nav class="navbar">
+<div class="logo"><i class="fa-solid fa-file-lines"></i> Resume ATS Checker</div>
+<a href="/homePage" class="back-btn-small"><i class="fa-solid fa-house"></i> Dashboard</a>
+</nav>
+<div class="result-container">
+<h1 class="page-title">ATS Resume Analysis Report</h1>
+
+<div class="card">
+<h2><i class="fa-solid fa-file"></i> Resume Details</h2>
+<p><strong>Resume:</strong> {{ filename }}</p>
+<p><strong>Target Role:</strong> {{ role }}</p>
+<p><strong>Date:</strong> {{ date }}</p>
+</div>
+
+<div class="score-card">
+<h2>ATS SCORE</h2>
+<div class="score-circle" id="circle">
+<div class="score-inner"><h1 id="scoreValue">0%</h1></div>
+</div>
+<p class="rating">
+{% if result.ats_score >= 90 %}
+🟢 <b>Excellent Match</b>
+{% elif result.ats_score >= 75 %}
+🟡 <b>Good Match</b>
+{% else %}
+🔴 <b>Needs Improvement</b>
+{% endif %}
+</p>
+</div>
+
+<div class="card">
+<h2><i class="fa-solid fa-lightbulb"></i> AI Summary</h2>
+<p>{{ result.summary }}</p>
+</div>
+
+<div class="card">
+<h2><i class="fa-solid fa-chart-column"></i> Score Breakdown</h2>
+<div class="score-breakdown">
+<div class="row"><span>Skills Match</span><strong>{{ result.score_breakdown.skills_match }}/40</strong></div>
+<div class="row"><span>Experience</span><strong>{{ result.score_breakdown.experience }}/20</strong></div>
+<div class="row"><span>Projects</span><strong>{{ result.score_breakdown.projects }}/15</strong></div>
+<div class="row"><span>Formatting</span><strong>{{ result.score_breakdown.formatting }}/10</strong></div>
+<div class="row"><span>Education</span><strong>{{ result.score_breakdown.education }}/5</strong></div>
+<div class="row"><span>Keywords</span><strong>{{ result.score_breakdown.keywords }}/10</strong></div>
+</div></div>
+
+<div class="grid">
+<div class="card"><h2><i class="fa-solid fa-circle-check"></i> Strengths</h2><ul>{% for item in result.get('strengths',[]) %}<li>{{ item }}</li>{% endfor %}</ul></div>
+<div class="card"><h2><i class="fa-solid fa-circle-xmark"></i> Weaknesses</h2><ul>{% for item in result.get('weaknesses',[]) %}<li>{{ item }}</li>{% endfor %}</ul></div>
+</div>
+
+<div class="card"><h2><i class="fa-solid fa-code"></i> Missing Skills</h2><div class="chips">{% for skill in result.get('missing_skills',[]) %}<span>{{ skill }}</span>{% endfor %}</div></div>
+
+<div class="card"><h2><i class="fa-solid fa-key"></i> Keywords To Improve</h2><div class="chips">{% for skill in result.get('keywords_to_improve',[]) %}<span>{{ skill }}</span>{% endfor %}</div></div>
+
+<div class="card"><h2><i class="fa-solid fa-wand-magic-sparkles"></i> AI Suggestions</h2><ul>{% for item in result.get('suggestions',[]) %}<li>{{ item }}</li>{% endfor %}</ul></div>
+
+<div class="card"><h2><i class="fa-solid fa-star"></i> Overall Recommendation</h2>
+{% if result.ats_score>=85 %}
+<p>✅ Your resume is ready for most applications.</p>
+{% elif result.ats_score>=70 %}
+<p>⚠ Improve keywords and formatting for a stronger ATS score.</p>
+{% else %}
+<p>❌ Improve skills, projects and keywords before applying.</p>
+{% endif %}
+</div>
+
+<a href="/homePage" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Analyze Another Resume</a>
+
+</div>
+
+<script>
+const score={{ result.ats_score }};
+const circle=document.getElementById("circle");
+const text=document.getElementById("scoreValue");
+const color=score>=90?"#22c55e":score>=75?"#facc15":"#ef4444";
+let current=0;
+const timer=setInterval(()=>{
+current++;
+circle.style.background=`conic-gradient(${color} ${current*3.6}deg,#e9ecef 0deg)`;
+text.innerHTML=current+"%";
+if(current>=score) clearInterval(timer);
+},15);
+</script>
 </body>
-
 </html>

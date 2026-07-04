@@ -154,8 +154,13 @@ def analyze():
         "summary": ""
     }}
     """
-    response=model.generate_content(prompt)
-    result=json.loads(response.text)
+    response = model.generate_content(prompt)
+    print("RAW RESPONSE:")
+    print(response.text)
+    text = response.text.strip()
+    if text.startswith("```"):
+        text = text.replace("```json", "").replace("```", "").strip()
+    result = json.loads(text)
     today = datetime.now().strftime("%d %B %Y")
     return render_template("results.html",name=name,result=result,filename=uploaded_file.filename,date=today,role=role)
 if __name__=='__main__':
